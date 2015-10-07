@@ -39,6 +39,42 @@ describe('humps', function() {
       }
     };
 
+    this.complex_one_level_underscore_obj = {
+      attr_one: 'foo',
+      attr_two: {
+        nestedAttr1: 'bar'
+      },
+      attr_three: {
+        nestedAttr2: {
+          nestedAttr3: [{
+            nestedInArray1: 'baz'
+          }, {
+            nestedInArray2: 'hello'
+          }, {
+            nestedInArray3: ['world', 'boo']
+          }]
+        }
+      }
+    };
+
+    this.complexOneLevelCamelObj = {
+      attrOne: 'foo',
+      attrTwo: {
+        nested_attr_1: 'bar'
+      },
+      attrThree: {
+        nested_attr_2: {
+          nested_attr_3: [{
+            nested_in_array_1: 'baz'
+          }, {
+            nested_in_array_2: 'hello'
+          }, {
+            nested_in_array_3: ['world', 'boo']
+          }]
+        }
+      }
+    };
+
     this.complexCamelObj = {
       attrOne: 'foo',
       attrTwo: {
@@ -163,6 +199,15 @@ describe('humps', function() {
     it('decamelizes keys ignoring numbers', function() {
       expect(humps.decamelizeKeys(this.complexCamelObj, '_', true)).toEqual(this.complexIgnoringNumbersObj);
     });
+
+    it('should not convert keys nested more than the level argument', function() {
+      expect(humps.decamelizeKeys(this.complexCamelObj, undefined, undefined, 1)).toEqual(this.complex_one_level_underscore_obj);
+    });
+
+    it('should convertall keys when level argument is greater or equal than the most nested level', function() {
+      expect(humps.decamelizeKeys(this.complexCamelObj, undefined, undefined, 4)).toEqual(this.complex_obj);
+    });
+
   });
 
   describe('.pascalizeKeys', function() {

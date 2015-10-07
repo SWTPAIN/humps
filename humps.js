@@ -11,8 +11,13 @@
 
 ;(function(global) {
 
-  var _processKeys = function(convert, obj, separator, ignoreNumbers) {
+  var _processKeys = function(convert, obj, separator, ignoreNumbers, level) {
+
     if(!_isObject(obj) || _isDate(obj) || _isRegExp(obj) || _isBoolean(obj)) {
+      return obj;
+    }
+
+    if (level === 0) {
       return obj;
     }
 
@@ -23,14 +28,14 @@
     if(_isArray(obj)) {
       output = [];
       for(l=obj.length; i<l; i++) {
-        output.push(_processKeys(convert, obj[i], separator, ignoreNumbers));
+        output.push(_processKeys(convert, obj[i], separator, ignoreNumbers, level));
       }
     }
     else {
       output = {};
       for(var key in obj) {
         if(obj.hasOwnProperty(key)) {
-          output[convert(key, separator, ignoreNumbers)] = _processKeys(convert, obj[key], separator, ignoreNumbers);
+          output[convert(key, separator, ignoreNumbers)] = _processKeys(convert, obj[key], separator, ignoreNumbers, level - 1);
         }
       }
     }
@@ -109,8 +114,8 @@
     camelizeKeys: function(object) {
       return _processKeys(camelize, object);
     },
-    decamelizeKeys: function(object, separator, ignoreNumbers) {
-      return _processKeys(decamelize, object, separator, ignoreNumbers);
+    decamelizeKeys: function(object, separator, ignoreNumbers, level) {
+      return _processKeys(decamelize, object, separator, ignoreNumbers, level);
     },
     pascalizeKeys: function(object) {
       return _processKeys(pascalize, object);
