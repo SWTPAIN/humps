@@ -181,6 +181,15 @@ describe('humps', function() {
       // Ensure it’s an array, and not an object with numeric keys
       expect(toString.call(result)).toEqual('[object Array]');
     });
+
+    it('should not convert keys nested more than the level argument', function() {
+      expect(humps.camelizeKeys(this.complex_one_level_underscore_obj, undefined, undefined, 1)).toEqual(this.complexCamelObj);
+    });
+
+    it('should convert all keys when level argument is greater or equal than the most nested level', function() {
+      expect(humps.camelizeKeys(this.complex_obj, undefined, undefined, 4)).toEqual(this.complexCamelObj);
+    });
+
   });
 
   describe('.decamelizeKeys', function() {
@@ -204,7 +213,7 @@ describe('humps', function() {
       expect(humps.decamelizeKeys(this.complexCamelObj, undefined, undefined, 1)).toEqual(this.complex_one_level_underscore_obj);
     });
 
-    it('should convertall keys when level argument is greater or equal than the most nested level', function() {
+    it('should convert all keys when level argument is greater or equal than the most nested level', function() {
       expect(humps.decamelizeKeys(this.complexCamelObj, undefined, undefined, 4)).toEqual(this.complex_obj);
     });
 

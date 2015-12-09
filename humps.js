@@ -111,8 +111,8 @@
     decamelize: decamelize,
     pascalize: pascalize,
     depascalize: decamelize,
-    camelizeKeys: function(object) {
-      return _processKeys(camelize, object);
+    camelizeKeys: function(object, separator, ignoreNumbers, level) {
+      return _processKeys(camelize, object, separator, ignoreNumbers, level);
     },
     decamelizeKeys: function(object, separator, ignoreNumbers, level) {
       return _processKeys(decamelize, object, separator, ignoreNumbers, level);
